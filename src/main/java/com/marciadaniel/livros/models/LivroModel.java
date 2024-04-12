@@ -12,7 +12,7 @@ import java.util.UUID;
 public class LivroModel extends
         RepresentationModel<LivroModel> implements Serializable{
     private static final long serialVersionUID = 1L;
-    @Id()
+    @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private UUID id;
     private String titulo;
@@ -23,6 +23,14 @@ public class LivroModel extends
     private BigDecimal preco;
     private int anoLancamento;
     private LocalDateTime dataRegistro;
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
 
     public UUID getId() {
         return id;
