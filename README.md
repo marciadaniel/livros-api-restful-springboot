@@ -10,6 +10,7 @@ Este projeto é uma API RESTful para gestão de livros, construído com Spring B
 - **Spring Validation** 
 - **Spring HATEOAS**
 - **PostgreSQL Database**
+- **Spring Security**
 
 ## Como Executar
 
