@@ -3,6 +3,7 @@ package com.marciadaniel.livros.controllers;
 import com.marciadaniel.livros.dtos.LivroDto;
 import com.marciadaniel.livros.models.LivroModel;
 import com.marciadaniel.livros.repositories.LivroRepository;
+import com.marciadaniel.livros.service.LivroService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,17 @@ public class LivroController {
     @Autowired
     LivroRepository livroRepository;
 
+    @Autowired
+    LivroService livroService;
+
     @GetMapping("/livros")
     public ResponseEntity<List<LivroModel>> getAll(){
-        List<LivroModel> livroList =
-                livroRepository.findAll();
+
+       List<LivroModel> livroList = livroService.getAll();
         if(!livroList.isEmpty()) {
             for(LivroModel livro : livroList) {
                 UUID id = livro.getId();
-                livro.add(linkTo(methodOn(LivroController.class).getOne(id)).withSelfRel());
+                livro.add(linkTo(methodOn(LivroController.class).getById(id)).withSelfRel());
             }
         }
         return ResponseEntity.status(HttpStatus.OK)
@@ -41,9 +45,10 @@ public class LivroController {
 
     @GetMapping("/livros/{id}")
     public ResponseEntity<Object>
-    getOne(@PathVariable(value="id") UUID id){
+    getById(@PathVariable(value="id") UUID id){
         Optional<LivroModel> livroOptional =
-                livroRepository.findById(id);
+                livroService.getById(id);
+
         if(livroOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("not found.");
@@ -57,24 +62,18 @@ public class LivroController {
     @PostMapping("/livros")
     public ResponseEntity<LivroModel>
     save(@RequestBody @Valid LivroDto livroDto) {
-        var livroModel = new LivroModel();
-        BeanUtils.copyProperties(livroDto, livroModel);
-        livroModel.setDataRegistro(LocalDateTime.now(ZoneId.of("UTC")));
+        LivroModel livro= livroService.save(livroDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(livroRepository.save(livroModel));
+                .body(livro);
     }
     @DeleteMapping("/livros/{id}")
     public ResponseEntity<Object>
     delete(@PathVariable(value="id") UUID id) {
-        Optional<LivroModel> livroOptional =
-                livroRepository.findById(id);
-        if(livroOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Not found.");
-        }
-        livroRepository.delete(livroOptional.get());
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("Deleted successfully.");
+
+       livroService.deleteById(id);
+        return ResponseEntity.noContent().build();
+
+
     }
     @PutMapping("/livros/{id}")
     public ResponseEntity<Object>
@@ -91,7 +90,7 @@ public class LivroController {
                 livroModel);
         livroModel.setDataRegistro(LocalDateTime.now(ZoneId.of("UTC")));
         return ResponseEntity.status(HttpStatus.OK)
-                .body(livroRepository.save(livroModel));
+                .body( livroService.updateUserById(livroDto));
     }
 
 
