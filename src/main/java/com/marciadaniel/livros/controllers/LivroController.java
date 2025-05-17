@@ -29,6 +29,11 @@ public class LivroController {
     @Autowired
     LivroService livroService;
 
+    @GetMapping("/")
+    public String home() {
+        return "Bem-vindo à API de livros!";
+    }
+
     @GetMapping("/livros")
     public ResponseEntity<List<LivroModel>> getAll(){
 
