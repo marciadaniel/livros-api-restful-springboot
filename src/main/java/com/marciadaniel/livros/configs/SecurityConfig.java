@@ -39,13 +39,14 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/").permitAll()
-                        . anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/").permitAll()
+//                        . anyRequest().authenticated())
+//                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
         return http.build();
     }
