@@ -13,6 +13,10 @@ Este projeto é uma API RESTful para gestão de livros, construído com Spring B
 - **Spring Security**
 
 ## Como Executar
+Acessa online em:
+https://livros-api-restful-springboot.onrender.com
+
+Ou também:
 
 1. Clone este repositório.
 2. Abra o projeto em sua IDE favorita (por exemplo, IntelliJ IDEA ou Eclipse).
